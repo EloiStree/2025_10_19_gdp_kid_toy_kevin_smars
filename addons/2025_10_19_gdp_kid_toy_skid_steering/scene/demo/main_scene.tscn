@@ -1,30 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://sof2ltbi73lf"]
+[gd_scene load_steps=5 format=3 uid="uid://sof2ltbi73lf"]
 
-[ext_resource type="PackedScene" uid="uid://b5akc3tino8jm" path="res://addons/2025_10_19_gdp_kid_toy_skid_steering/scene/element/toy_car_basic_with_script.tscn" id="1_p4152"]
 [ext_resource type="Script" uid="uid://bma4sh5lekwu5" path="res://addons/2025_10_19_gdp_kid_toy_skid_steering/scripts/skid_car_default_input.gd" id="2_acghe"]
+[ext_resource type="PackedScene" uid="uid://b5akc3tino8jm" path="res://addons/2025_10_19_gdp_kid_toy_skid_steering/scene/element/skidcar_with_script.tscn" id="2_xoarr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_p4152"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_acghe"]
+size = Vector3(11.192383, 0.4584961, 13.494385)
 
 [node name="Node3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.9146848, 0.40416798, 0, -0.40416798, 0.9146848, 0, 1.0073242, 1.6466064)
 
-[node name="ToyCarBasic" parent="." instance=ExtResource("1_p4152")]
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.85225695, 0.5231235, 0, -0.5231235, 0.85225695, 0, 0.7186279, 0.27593994)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5414994, 0)
+transform = Transform3D(3.8245177, 0, 0, 0, 1, 0, 0, 0, 4.1671724, 0, -0.5414994, 0)
 mesh = SubResource("BoxMesh_p4152")
 
-[node name="Node" type="Node" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
 
-[node name="NodeInput" type="Node" parent="Node"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27075195, 0)
+shape = SubResource("BoxShape3D_acghe")
+
+[node name="ToyCarBasicWithDefaultInput" type="Node3D" parent="."]
+
+[node name="NodeInput" type="Node" parent="ToyCarBasicWithDefaultInput"]
+
+[node name="NodeKeyboard" type="Node" parent="ToyCarBasicWithDefaultInput/NodeInput"]
 script = ExtResource("2_acghe")
 
-[connection signal="on_left_back" from="Node/NodeInput" to="ToyCarBasic" method="set_left_down_button_down"]
-[connection signal="on_left_front" from="Node/NodeInput" to="ToyCarBasic" method="set_left_up_button_down"]
-[connection signal="on_right_back" from="Node/NodeInput" to="ToyCarBasic" method="set_right_down_button_down"]
-[connection signal="on_right_front" from="Node/NodeInput" to="ToyCarBasic" method="set_right_up_button_down"]
+[node name="ToyCarBasic" parent="ToyCarBasicWithDefaultInput" instance=ExtResource("2_xoarr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75994873, 0)
+
+[connection signal="on_left_back" from="ToyCarBasicWithDefaultInput/NodeInput/NodeKeyboard" to="ToyCarBasicWithDefaultInput/ToyCarBasic" method="set_left_down_button_down"]
+[connection signal="on_left_front" from="ToyCarBasicWithDefaultInput/NodeInput/NodeKeyboard" to="ToyCarBasicWithDefaultInput/ToyCarBasic" method="set_left_up_button_down"]
+[connection signal="on_right_back" from="ToyCarBasicWithDefaultInput/NodeInput/NodeKeyboard" to="ToyCarBasicWithDefaultInput/ToyCarBasic" method="set_right_down_button_down"]
+[connection signal="on_right_front" from="ToyCarBasicWithDefaultInput/NodeInput/NodeKeyboard" to="ToyCarBasicWithDefaultInput/ToyCarBasic" method="set_right_up_button_down"]
